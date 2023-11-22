@@ -17,18 +17,19 @@ class _SettingsScreenState extends State<PersonalData> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Personal Data'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 20),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
+        child: Column(
               children: [
-                const AvatarCard(),
-                const SizedBox(height: 20),
-                const Divider(),
-                const SizedBox(height: 10),
                 Column(
                   children: List.generate(
                     settings.length,
@@ -39,8 +40,6 @@ class _SettingsScreenState extends State<PersonalData> {
                 const Divider(),
                 const SizedBox(height: 10),
               ],
-            ),
-          ),
         ),
       ),
     );
