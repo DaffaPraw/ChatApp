@@ -52,9 +52,28 @@ class _LoginPageState extends State<LoginPage> {
           padding: const EdgeInsets.symmetric(horizontal: 30.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start, // Menambahkan ini
             children: [
-              const SizedBox(height: 0),
+              // Teks "Welcome Back,"
+              Text(
+                "Welcome Back,",
+                style: TextStyle(
+                  fontSize: 24,
+                  color: Color(0xFFECB365),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
 
+              // Teks "Log in now to continue"
+              Text(
+                "Log in now to continue",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Color(0xFFECB365),
+                ),
+              ),
+
+              const SizedBox(height: 20),
               // logo
               Icon(
                 Icons.message,
