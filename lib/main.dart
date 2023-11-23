@@ -7,11 +7,22 @@ import 'package:flutter/material.dart';
 import 'package:chat_app/setting/screen/setting_screen.dart';
 import 'package:chat_app/setting/screen/inner_setting/personal.dart';
 import 'package:chat_app/setting/screen/inner_setting/notification.dart';
+import 'package:chat_app/firebase_options.dart';
+import 'package:chat_app/services/auth/auth_gate.dart';
+import 'package:chat_app/services/auth/auth_service.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import 'pages/login_page.dart';
-
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => AuthService(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -21,16 +32,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: {
-    '/personal': (context) => const PersonalData(),
-    '/notification': (context) => const Notifications(),
-    '/datausage': (context) => const DataUsages(),
-  },
-
+        '/personal': (context) => const PersonalData(),
+        '/notification': (context) => const Notifications(),
+        '/datausage': (context) => const DataUsages(),
+      },
 
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,),
-      home: const SettingsScreen(), //LoginOrRegister()
+      home: SettingsScreen(),//AuthGate(),
     );
   }
 }

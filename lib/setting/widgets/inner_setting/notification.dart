@@ -18,25 +18,27 @@ class InnerSettingSwitch extends StatefulWidget {
 
 class _InnerSettingSwitchState extends State<InnerSettingSwitch> {
   late SharedPreferences prefs;
-  bool commonSwitchValue = true;
+  late String switchKey; // Unique key for each switch
+  bool switchValue = true;
 
   @override
   void initState() {
     super.initState();
+    switchKey = 'switch_${widget.setting.title.toLowerCase()}';
     loadSwitchValue();
   }
 
   Future<void> loadSwitchValue() async {
     prefs = await SharedPreferences.getInstance();
     setState(() {
-      commonSwitchValue = prefs.getBool('common_switch') ?? true;
+      switchValue = prefs.getBool(switchKey) ?? true;
     });
   }
 
   Future<void> saveSwitchValue(bool value) async {
-    await prefs.setBool('common_switch', value);
+    await prefs.setBool(switchKey, value);
     setState(() {
-      commonSwitchValue = value;
+      switchValue = value;
     });
   }
 
@@ -44,7 +46,7 @@ class _InnerSettingSwitchState extends State<InnerSettingSwitch> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        bool newSwitchValue = !commonSwitchValue;
+        bool newSwitchValue = !switchValue;
         await saveSwitchValue(newSwitchValue);
       },
       child: Row(
@@ -74,7 +76,7 @@ class _InnerSettingSwitchState extends State<InnerSettingSwitch> {
           Align(
             alignment: Alignment.centerRight,
             child: Switch(
-              value: commonSwitchValue,
+              value: switchValue,
               onChanged: (value) async {
                 await saveSwitchValue(value);
                 // Handle switch toggle for the specific setting if needed

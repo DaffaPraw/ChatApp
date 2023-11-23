@@ -1,3 +1,4 @@
+import 'package:chat_app/setting/widgets/inner_setting/notification.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:chat_app/constants.dart';
@@ -18,7 +19,7 @@ class _SettingsScreenState extends State<DataUsages> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Data Usage'),
+        title: Text('Data Usage and Proxy'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -29,11 +30,21 @@ class _SettingsScreenState extends State<DataUsages> {
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 20),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text(
+                  'Media Auto-Download',
+                  style: TextStyle(
+                    color: kprimaryColor,
+                    fontSize: ksmallFontSize,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
                 Column(
                   children: List.generate(
                     settings.length,
-                    (index) => SettingTile(setting: settings5[index]),
+                    (index) => InnerSettingSwitch(setting: settings5[index]),
                   ),
                 ),
                 const SizedBox(height: 10),

@@ -10,10 +10,21 @@ class AvatarCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Image.asset(
-          "lib/setting/assets/avatar.png",
-          width: 80,
-          height: 80,
+        Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: Colors.grey,
+              width: 2.0, 
+            ),
+          ),
+          child: ClipOval(
+            child: Image.asset(
+              "lib/setting/assets/avatar.png",
+              width: 80,
+              height: 80,
+            ),
+          ),
         ),
         const SizedBox(width: 10),
         Column(
@@ -29,7 +40,7 @@ class AvatarCard extends StatelessWidget {
               ),
             ),
             Text(
-              "Halo Saya User!",
+              "Hello, I'm User!",
               style: TextStyle(
                 fontSize: ksmallFontSize,
                 color: Colors.grey.shade600,

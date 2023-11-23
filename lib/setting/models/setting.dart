@@ -119,19 +119,19 @@ final List<Setting> settings4 = [
 
 final List<Setting> settings5 = [
   Setting(
-    title: "Mobile Data",
+    title: "When Using Mobile Data",
     route: "/",
     routes: "/datausage",
     icon: Icons.network_cell_outlined,
   ),
   Setting(
-    title: "Wi-Fi",
+    title: "When Using Wi-Fi",
     route: "/",
     routes: "/datausage",
     icon: Icons.cell_wifi,
   ),
   Setting(
-    title: "Roaming",
+    title: "When Roaming",
     route: "/",
     routes: "/datausage",
     icon: Icons.mode_of_travel,

@@ -30,6 +30,10 @@ class _SettingsScreenState extends State<PersonalData> {
         padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 20),
         child: Column(
               children: [
+                const AvatarCard(),
+                const SizedBox(height: 20),
+                const Divider(),
+                const SizedBox(height: 10),
                 Column(
                   children: List.generate(
                     settings.length,
