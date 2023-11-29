@@ -5,7 +5,7 @@ import 'package:chat_app/constants.dart';
 import 'package:chat_app/setting/models/setting.dart';
 import 'package:chat_app/setting/widgets/avatar_card.dart';
 import 'package:chat_app/setting/widgets/setting_tile.dart';
-import 'package:chat_app/setting/widgets/support_card.dart';
+import 'package:chat_app/setting/widgets/motto_card.dart';
 
 class Notifications extends StatefulWidget {
   const Notifications({super.key});

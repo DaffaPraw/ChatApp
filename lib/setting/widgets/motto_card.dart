@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:chat_app/constants.dart';
 
-class SupportCard extends StatelessWidget {
-  const SupportCard({
+class MottoCard extends StatelessWidget {
+  const MottoCard({
     super.key,
   });
 

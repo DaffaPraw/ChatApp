@@ -18,7 +18,7 @@ class InnerSettingSwitch extends StatefulWidget {
 
 class _InnerSettingSwitchState extends State<InnerSettingSwitch> {
   late SharedPreferences prefs;
-  late String switchKey; // Unique key for each switch
+  late String switchKey; 
   bool switchValue = true;
 
   @override
@@ -79,7 +79,6 @@ class _InnerSettingSwitchState extends State<InnerSettingSwitch> {
               value: switchValue,
               onChanged: (value) async {
                 await saveSwitchValue(value);
-                // Handle switch toggle for the specific setting if needed
                 if (widget.setting.routes == '/settings/notification') {
                   // Handle switch toggle for the notification settings
                   // You can add more conditions for other settings if needed

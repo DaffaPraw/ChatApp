@@ -21,8 +21,8 @@ class AvatarCard extends StatelessWidget {
           child: ClipOval(
             child: Image.asset(
               "lib/setting/assets/avatar.png",
-              width: 80,
-              height: 80,
+              width: 90,
+              height: 90,
             ),
           ),
         ),

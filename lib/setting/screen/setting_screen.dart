@@ -4,7 +4,7 @@ import 'package:chat_app/constants.dart';
 import 'package:chat_app/setting/models/setting.dart';
 import 'package:chat_app/setting/widgets/avatar_card.dart';
 import 'package:chat_app/setting/widgets/setting_tile.dart';
-import 'package:chat_app/setting/widgets/support_card.dart';
+import 'package:chat_app/setting/widgets/motto_card.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -54,7 +54,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                const SupportCard()
+                const MottoCard()
               ],
             ),
           ),

@@ -35,10 +35,10 @@ final List<Setting> settings = [
     icon: Icons.sync_alt,
   ),
   Setting(
-    title: "Dark Mode/Light Mode",
+    title: "Language",
     route: "/",
-    routes: "/setting",
-    icon: Icons.dark_mode,
+    routes: "/lang",
+    icon: Icons.language,
   ),
 ];
 
@@ -56,10 +56,10 @@ final List<Setting> settings2 = [
     icon: Icons.help,
   ),
   Setting(
-    title: "Delete Account",
+    title: "Log-Out",
     route: "/",
-    routes: "/personal",
-    icon: CupertinoIcons.delete_solid,
+    routes: "/logout",
+    icon: Icons.logout,
   ),
 ];
 
@@ -128,7 +128,7 @@ final List<Setting> settings5 = [
     title: "When Using Wi-Fi",
     route: "/",
     routes: "/datausage",
-    icon: Icons.cell_wifi,
+    icon: Icons.wifi,
   ),
   Setting(
     title: "When Roaming",
