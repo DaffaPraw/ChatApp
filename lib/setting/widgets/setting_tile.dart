@@ -63,9 +63,7 @@ class _SettingTileState extends State<SettingTile> {
                   ),
                   TextButton(
                     onPressed: () {
-                      // ISI MASIH KOSONG
                       Navigator.of(context).pop();
-                      // ISI MASIH KOSONG
                     },
                     child: Text('Confirm'),
                   ),
@@ -91,6 +89,30 @@ class _SettingTileState extends State<SettingTile> {
                     onPressed: () {
                       Navigator.of(context).pop();
                       Navigator.pushNamed(context, '/logout');
+                    },
+                    child: Text('Confirm'),
+                  ),
+                ],
+              );
+            },
+          );
+        } else if (widget.setting.title == 'Sync') {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Sync'),
+                content: Text('Sync your massage?'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('Cancel'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
                     },
                     child: Text('Confirm'),
                   ),

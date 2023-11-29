@@ -46,7 +46,7 @@ final List<Setting> settings2 = [
   Setting(
     title: "Sync",
     route: "/",
-    routes: "/personal",
+    routes: "/sync",
     icon: Icons.sync,
   ),
   Setting(
