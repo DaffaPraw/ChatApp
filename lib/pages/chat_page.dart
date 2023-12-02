@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:chat_app/components/chat_bubble.dart';
 import 'package:chat_app/components/text_field.dart';
 import 'package:chat_app/services/chat/chat_service.dart';
+import 'package:chat_app/services/image_service.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,10 +13,12 @@ import 'package:image_picker/image_picker.dart';
 class ChatPage extends StatefulWidget {
   final String receiverUserEmail;
   final String receiverUserID;
+  final String imageUrl;
   const ChatPage({
     super.key,
     required this.receiverUserEmail,
     required this.receiverUserID,
+    required this.imageUrl,
   });
 
   @override
@@ -24,6 +27,7 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   final TextEditingController _messageController = TextEditingController();
+  final image_service _image_service = image_service();
   final ChatService _chatService = ChatService();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseStorage storage = FirebaseStorage.instance;
@@ -134,7 +138,16 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.receiverUserEmail)),
+      appBar: AppBar(
+          leading: Padding(
+            padding: EdgeInsets.all(3),
+            child: CircleAvatar(
+                radius: 50,
+                backgroundImage: NetworkImage(
+                  widget.imageUrl,
+                )),
+          ),
+          title: Text(widget.receiverUserEmail)),
       body: Column(
         children: [
           Expanded(
