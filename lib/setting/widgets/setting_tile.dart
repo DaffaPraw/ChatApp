@@ -2,7 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:chat_app/constants.dart';
 import 'package:chat_app/setting/models/setting.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../services/auth/auth_service.dart';
 
 class SettingTile extends StatefulWidget {
   final Setting setting;
@@ -88,6 +91,8 @@ class _SettingTileState extends State<SettingTile> {
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pop();
+                      final authService = Provider.of<AuthService>(context, listen: false);
+                      authService.signOut();
                       Navigator.pushNamed(context, '/logout');
                     },
                     child: Text('Confirm'),
