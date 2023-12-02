@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,15 +8,34 @@ import 'package:chat_app/setting/widgets/avatar_card.dart';
 import 'package:chat_app/setting/widgets/setting_tile.dart';
 import 'package:chat_app/setting/widgets/support_card.dart';
 
-class DataUsages extends StatefulWidget {
-  const DataUsages({super.key});
+class PersonalData extends StatefulWidget {
+  const PersonalData({super.key});
 
   @override
-  State<DataUsages> createState() => _SettingsScreenState();
+  State<PersonalData> createState() => _SettingsScreenState();
 }
 
-class _SettingsScreenState extends State<DataUsages> {
+class _SettingsScreenState extends State<PersonalData> {
   User? user = FirebaseAuth.instance.currentUser;
+
+  Future<void> editData(String field, String data) async {
+    try {
+      // Replace 'users' with the actual name of your Firestore collection
+      CollectionReference usersCollection =
+          FirebaseFirestore.instance.collection('users');
+
+      // Update the 'email' field of the specified user document
+      await usersCollection.doc(user?.uid ?? 'empty').update({
+        field: data,
+      });
+
+      print('Pfpurl updated successfully');
+      setState(() {});
+    } catch (e) {
+      print('Error updating user pfpurl: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +54,9 @@ class _SettingsScreenState extends State<DataUsages> {
                 Column(
                   children: List.generate(
                     settings.length,
-                    (index) => SettingTile(setting: settings5[index]),
+                    (index) => SettingTile(
+                      setting: settings3[index],
+                    ),
                   ),
                 ),
                 const SizedBox(height: 10),

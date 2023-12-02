@@ -1,21 +1,29 @@
+import 'dart:io';
+
+import 'package:chat_app/services/image_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:chat_app/constants.dart';
 import 'package:chat_app/setting/models/setting.dart';
 import 'package:chat_app/setting/widgets/avatar_card.dart';
 import 'package:chat_app/setting/widgets/setting_tile.dart';
 import 'package:chat_app/setting/widgets/support_card.dart';
+import 'package:image_picker/image_picker.dart';
 
-class DataUsages extends StatefulWidget {
-  const DataUsages({super.key});
+class SettingsScreen extends StatefulWidget {
+  const SettingsScreen({super.key});
 
   @override
-  State<DataUsages> createState() => _SettingsScreenState();
+  State<SettingsScreen> createState() => _SettingsScreenState();
 }
 
-class _SettingsScreenState extends State<DataUsages> {
+class _SettingsScreenState extends State<SettingsScreen> {
+  image_service imageService = image_service();
   User? user = FirebaseAuth.instance.currentUser;
+  // String? useremail = user?.email;
+  // String nonuser = user?.email ?? 'empty';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,12 +42,20 @@ class _SettingsScreenState extends State<DataUsages> {
                 Column(
                   children: List.generate(
                     settings.length,
-                    (index) => SettingTile(setting: settings5[index]),
+                    (index) => SettingTile(setting: settings[index]),
                   ),
                 ),
                 const SizedBox(height: 10),
                 const Divider(),
                 const SizedBox(height: 10),
+                Column(
+                  children: List.generate(
+                    settings2.length,
+                    (index) => SettingTile(setting: settings2[index]),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                const SupportCard()
               ],
             ),
           ),

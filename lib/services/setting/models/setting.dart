@@ -66,29 +66,56 @@ final List<Setting> settings2 = [
 final List<Setting> settings3 = [
   Setting(
     title: "Username",
-    route: "/",
-    routes: "/personal",
+    route: "zzz",
+    routes: "zzz",
     icon: Icons.account_box,
   ),
   Setting(
     title: "Phone Number",
-    route: "/",
-    routes: "/personal",
+    route: "",
+    routes: "zzz",
     icon: CupertinoIcons.phone_fill,
   ),
   Setting(
     title: "Email",
-    route: "/",
-    routes: "/personal",
+    route: "zzz",
+    routes: "zzz",
     icon: CupertinoIcons.envelope_fill,
   ),
   Setting(
     title: "Two-step Verification",
-    route: "/",
-    routes: "/personal",
+    route: "zzz",
+    routes: "zzz",
     icon: CupertinoIcons.checkmark_seal_fill,
   ),
 ];
+
+// final List<Setting> settings3 = [
+//   Setting(
+//     title: "Username",
+//     route: "/",
+//     routes: "/personal",
+//     icon: Icons.account_box,
+//   ),
+//   Setting(
+//     title: "Phone Number",
+//     route: "/",
+//     routes: "/personal",
+//     icon: CupertinoIcons.phone_fill,
+//   ),
+//   Setting(
+//     title: "Email",
+//     route: "/",
+//     routes: "/personal",
+//     icon: CupertinoIcons.envelope_fill,
+//   ),
+//   Setting(
+//     title: "Two-step Verification",
+//     route: "/",
+//     routes: "/personal",
+//     icon: CupertinoIcons.checkmark_seal_fill,
+//   ),
+// ];
 
 final List<Setting> settings4 = [
   Setting(
