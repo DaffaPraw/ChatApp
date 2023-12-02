@@ -38,9 +38,8 @@ class MyApp extends StatelessWidget {
         '/logout': (context) => const AuthGate(),
       },
       
-
       debugShowCheckedModeBanner: false,
-      home: SettingsScreen(),//AuthGate(),
+      home: AuthGate(),
     );
   }
 }
