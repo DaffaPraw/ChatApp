@@ -1,6 +1,7 @@
 import 'package:chat_app/pages/chat_page.dart';
 import 'package:chat_app/pages/profile.dart';
 import 'package:chat_app/services/auth/auth_service.dart';
+import 'package:chat_app/setting/screen/setting_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,7 @@ class _HomePageState extends State<HomePage> {
   void settings() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const Profile()),
+      MaterialPageRoute(builder: (context) => const SettingsScreen()), //Profile()
     );
   }
 

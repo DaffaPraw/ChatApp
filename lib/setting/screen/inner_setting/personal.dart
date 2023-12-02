@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:chat_app/constants.dart';
@@ -14,6 +15,7 @@ class PersonalData extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<PersonalData> {
+  User? user = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +32,7 @@ class _SettingsScreenState extends State<PersonalData> {
         padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 20),
         child: Column(
               children: [
-                const AvatarCard(),
+                AvatarCard(useremail: user?.email ?? 'empty'),
                 const SizedBox(height: 20),
                 const Divider(),
                 const SizedBox(height: 10),

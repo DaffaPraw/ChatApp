@@ -1,10 +1,16 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:io';
+
+import 'package:chat_app/services/image_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:chat_app/constants.dart';
 import 'package:chat_app/setting/models/setting.dart';
 import 'package:chat_app/setting/widgets/avatar_card.dart';
 import 'package:chat_app/setting/widgets/setting_tile.dart';
 import 'package:chat_app/setting/widgets/motto_card.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:flutter/cupertino.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -14,6 +20,11 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  image_service imageService = image_service();
+  User? user = FirebaseAuth.instance.currentUser;
+  // String? useremail = user?.email;
+  // String nonuser = user?.email ?? 'empty';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +45,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const AvatarCard(),
+                AvatarCard(useremail: user?.email ?? 'empty'),
                 const SizedBox(height: 20),
                 const Divider(),
                 const SizedBox(height: 10),

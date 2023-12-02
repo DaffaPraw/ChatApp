@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
-  // functions
   final void Function()? onTap;
 
   const LoginPage({
@@ -18,7 +17,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // text controllers
   final emailController = TextEditingController();
   final passController = TextEditingController();
 

@@ -18,7 +18,6 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  // text controllers
   final emailController = TextEditingController();
   final passController = TextEditingController();
   final passConfirmController = TextEditingController();
