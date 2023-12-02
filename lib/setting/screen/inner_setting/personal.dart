@@ -5,7 +5,7 @@ import 'package:chat_app/constants.dart';
 import 'package:chat_app/setting/models/setting.dart';
 import 'package:chat_app/setting/widgets/avatar_card.dart';
 import 'package:chat_app/setting/widgets/setting_tile.dart';
-import 'package:chat_app/setting/widgets/support_card.dart';
+import 'package:chat_app/setting/widgets/motto_card.dart';
 
 class PersonalData extends StatefulWidget {
   const PersonalData({super.key});
@@ -19,13 +19,18 @@ class _SettingsScreenState extends State<PersonalData> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Personal Data'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 20),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
+        child: Column(
               children: [
                 AvatarCard(useremail: user?.email ?? 'empty'),
                 const SizedBox(height: 20),
@@ -41,8 +46,6 @@ class _SettingsScreenState extends State<PersonalData> {
                 const Divider(),
                 const SizedBox(height: 10),
               ],
-            ),
-          ),
         ),
       ),
     );

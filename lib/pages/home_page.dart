@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
   void settings() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const SettingsScreen()),
+      MaterialPageRoute(builder: (context) => const SettingsScreen()), //SettingsScreen()
     );
   }
 
