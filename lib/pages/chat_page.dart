@@ -29,13 +29,21 @@ class _ChatPageState extends State<ChatPage> {
   final FirebaseStorage storage = FirebaseStorage.instance;
 
   String imageUrl = '';
+  String? lastTappedMessage;
 
   void sendMessage() async {
     if (_messageController.text.isNotEmpty) {
       await _chatService.sendMessage(
-          widget.receiverUserID, _messageController.text, '');
+        widget.receiverUserID,
+        _messageController.text,
+        '',
+        replyToMessage: lastTappedMessage,
+      );
 
       _messageController.clear();
+      setState(() {
+        lastTappedMessage = null;
+      });
     }
   }
 
@@ -156,6 +164,13 @@ class _ChatPageState extends State<ChatPage> {
           return Text('Error${snapshot.error}');
         }
 
+        if (!snapshot.hasData ||
+            snapshot.data == null ||
+            snapshot.data!.docs.isEmpty) {
+          return Center(
+              child: Text('This is a start of your new conversation!!'));
+        }
+
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Text('Loading...');
         }
@@ -190,9 +205,24 @@ class _ChatPageState extends State<ChatPage> {
                   ? MainAxisAlignment.end
                   : MainAxisAlignment.start,
           children: [
-            Text(data['senderEmail']),
-            const SizedBox(height: 5),
-            ChatBubble(message: data['message'], image: data['image']),
+            if (data['replyToMessage'] != null)
+              ChatBubble(
+                message: 'Replying to: ${data['replyToMessage']}',
+                image: data['image'],
+                isReply: true,
+              ),
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  lastTappedMessage = data['message'];
+                });
+              },
+              child: ChatBubble(
+                message: data['message'],
+                image: data['image'],
+                isReply: false,
+              ),
+            ),
           ],
         ),
       ),

@@ -13,6 +13,7 @@ import 'package:chat_app/services/auth/auth_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:chat_app/pages/contactList.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,7 +38,6 @@ class MyApp extends StatelessWidget {
         '/datausage': (context) => const DataUsages(),
         '/logout': (context) => const AuthGate(),
       },
-      
       debugShowCheckedModeBanner: false,
       home: AuthGate(),
     );

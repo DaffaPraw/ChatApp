@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 class ChatBubble extends StatelessWidget {
   final String message;
   final String image;
+  final bool isReply;
 
-  const ChatBubble({
-    Key? key,
-    required this.message,
-    required this.image,
-  }) : super(key: key);
+  const ChatBubble(
+      {Key? key,
+      required this.message,
+      required this.image,
+      this.isReply = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +18,7 @@ class ChatBubble extends StatelessWidget {
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        color: Colors.blue,
+        color: isReply ? Colors.grey : Colors.orange[500],
       ),
       child: Column(
         children: [
