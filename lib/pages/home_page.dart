@@ -31,25 +31,49 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Home Page'),
-        actions: [
-          IconButton(
-            onPressed: signOut,
-            icon: const Icon(Icons.logout),
+    return DefaultTabController(
+      length: 2, // Number of tabs
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Home Page'),
+          actions: [
+            IconButton(
+              onPressed: signOut,
+              icon: const Icon(Icons.logout),
+            ),
+            IconButton(
+              onPressed: settings,
+              icon: const Icon(Icons.settings),
+            )
+          ],
+          bottom: const TabBar(
+            tabs: [
+              Tab(text: 'Chat'),
+              Tab(text: 'Status'),
+            ],
           ),
-          IconButton(
-            onPressed: settings,
-            icon: const Icon(Icons.settings),
-          )
-        ],
+        ),
+        body: const TabBarView(
+          children: [
+            _ChatTab(),
+            _StatusTab(),
+          ],
+        ),
       ),
-      body: _buildUserList(),
     );
   }
+}
 
-  Widget _buildUserList() {
+class _ChatTab extends StatefulWidget {
+  const _ChatTab({Key? key}) : super(key: key);
+
+  @override
+  _ChatTabState createState() => _ChatTabState();
+}
+
+class _ChatTabState extends State<_ChatTab> {
+  @override
+  Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance.collection('users').snapshots(),
       builder: (context, snapshot) {
@@ -73,7 +97,7 @@ class _HomePageState extends State<HomePage> {
   Widget _buildUserListItem(DocumentSnapshot document) {
     Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
 
-    if (_auth.currentUser!.email != data['email']) {
+    if (FirebaseAuth.instance.currentUser!.email != data['email']) {
       return ListTile(
         title: Text(data['email']),
         onTap: () {
@@ -91,5 +115,20 @@ class _HomePageState extends State<HomePage> {
     } else {
       return Container();
     }
+  }
+}
+
+class _StatusTab extends StatefulWidget {
+  const _StatusTab({Key? key}) : super(key: key);
+
+  @override
+  _StatusTabState createState() => _StatusTabState();
+}
+
+class _StatusTabState extends State<_StatusTab> {
+  @override
+  Widget build(BuildContext context) {
+    // Empty container for the Status tab
+    return Container();
   }
 }
