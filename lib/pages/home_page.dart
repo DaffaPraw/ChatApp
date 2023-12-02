@@ -1,6 +1,7 @@
 import 'package:chat_app/pages/chat_page.dart';
 import 'package:chat_app/pages/profile.dart';
 import 'package:chat_app/services/auth/auth_service.dart';
+import 'package:chat_app/services/image_service.dart';
 import 'package:chat_app/setting/screen/setting_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,6 +17,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final image_service _image_service = image_service();
 
   void signOut() {
     final authService = Provider.of<AuthService>(context, listen: false);
@@ -25,55 +27,31 @@ class _HomePageState extends State<HomePage> {
   void settings() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const SettingsScreen()), //Profile()
+      MaterialPageRoute(builder: (context) => const SettingsScreen()),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2, // Number of tabs
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Home Page'),
-          actions: [
-            IconButton(
-              onPressed: signOut,
-              icon: const Icon(Icons.logout),
-            ),
-            IconButton(
-              onPressed: settings,
-              icon: const Icon(Icons.settings),
-            )
-          ],
-          bottom: const TabBar(
-            tabs: [
-              Tab(text: 'Chat'),
-              Tab(text: 'Status'),
-            ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Home Page'),
+        actions: [
+          IconButton(
+            onPressed: signOut,
+            icon: const Icon(Icons.logout),
           ),
-        ),
-        body: const TabBarView(
-          children: [
-            _ChatTab(),
-            _StatusTab(),
-          ],
-        ),
+          IconButton(
+            onPressed: settings,
+            icon: const Icon(Icons.settings),
+          )
+        ],
       ),
+      body: _buildUserList(),
     );
   }
-}
 
-class _ChatTab extends StatefulWidget {
-  const _ChatTab({Key? key}) : super(key: key);
-
-  @override
-  _ChatTabState createState() => _ChatTabState();
-}
-
-class _ChatTabState extends State<_ChatTab> {
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildUserList() {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance.collection('users').snapshots(),
       builder: (context, snapshot) {
@@ -87,26 +65,48 @@ class _ChatTabState extends State<_ChatTab> {
 
         return ListView(
           children: snapshot.data!.docs
-              .map<Widget>((doc) => _buildUserListItem(doc))
+              .map<Widget>((doc) => FutureBuilder<Widget>(
+                    future: _buildUserListItem(doc),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        return snapshot.data!;
+                      } else {
+                        return const Text('loading user...');
+                      }
+                    },
+                  ))
               .toList(),
         );
       },
     );
   }
 
-  Widget _buildUserListItem(DocumentSnapshot document) {
+  Future<Widget> _buildUserListItem(DocumentSnapshot document) async {
     Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
 
-    if (FirebaseAuth.instance.currentUser!.email != data['email']) {
+    if (_auth.currentUser!.email != data['email']) {
+      String imageUrl =
+          await _image_service.getPfpUrlId(data['uid'] ?? 'empty') ?? 'empty';
+      print(imageUrl);
+
       return ListTile(
+        leading: ClipOval(
+            child: Image.network(
+          imageUrl.toString(),
+          // "https://firebasestorage.googleapis.com/v0/b/chatapp-dfdd5.appspot.com/o/images%2Favatar-male.png?alt=media&token=24f15f9f-5eb4-4071-9b10-462a2b948353",
+          width: 50,
+          height: 50,
+        )),
         title: Text(data['email']),
-        onTap: () {
+        onTap: () async {
+          // print(imageUrl);
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => ChatPage(
                 receiverUserEmail: data['email'],
                 receiverUserID: data['uid'],
+                imageUrl: imageUrl,
               ),
             ),
           );
@@ -115,20 +115,5 @@ class _ChatTabState extends State<_ChatTab> {
     } else {
       return Container();
     }
-  }
-}
-
-class _StatusTab extends StatefulWidget {
-  const _StatusTab({Key? key}) : super(key: key);
-
-  @override
-  _StatusTabState createState() => _StatusTabState();
-}
-
-class _StatusTabState extends State<_StatusTab> {
-  @override
-  Widget build(BuildContext context) {
-    // Empty container for the Status tab
-    return Container();
   }
 }
