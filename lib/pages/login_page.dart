@@ -205,6 +205,10 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
+              Container(
+                color: Colors.white,
+                height: 300,
+              )
             ],
           ),
         ),

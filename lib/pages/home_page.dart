@@ -1,15 +1,14 @@
 import 'package:chat_app/pages/chat_page.dart';
-import 'package:chat_app/pages/userdisplay.dart';
-import 'package:chat_app/pages/profile.dart';
 import 'package:chat_app/services/auth/auth_gate.dart';
 import 'package:chat_app/services/auth/auth_service.dart';
-import 'package:chat_app/services/auth/login_or_register.dart';
 import 'package:chat_app/services/image_service.dart';
 import 'package:chat_app/setting/screen/setting_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'contactList.dart';
+import "groupDisplay.dart";
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -42,9 +41,10 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2, 
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           backgroundColor: Colors.orange[900],
           title: const Text('ChatinAja'),
           actions: [
@@ -91,12 +91,32 @@ class _ChatTabState extends State<_ChatTab> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _buildUserList(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ContactList()),
+          );
+        },
+        child: Icon(Icons.add),
+        backgroundColor: Color(0xFFECB365),
+      ),
     );
   }
 
   Widget _buildUserList() {
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('users').snapshots(),
+    final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+    User? currentUser = _firebaseAuth.currentUser;
+
+    if (currentUser == null) {
+      return const Text('User not authenticated');
+    }
+
+    return StreamBuilder<DocumentSnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUser.uid)
+          .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return const Text('error');
@@ -106,20 +126,168 @@ class _ChatTabState extends State<_ChatTab> {
           return const Text('loading...');
         }
 
-        return ListView(
-          children: snapshot.data!.docs
-              .map<Widget>((doc) => FutureBuilder<Widget>(
-                    future: _buildUserListItem(doc),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        return snapshot.data!;
-                      } else {
-                        return const Text('loading user...');
-                      }
-                    },
-                  ))
-              .toList(),
-        );
+        List<String> contactUserIds = [];
+        List<String> groupIds = [];
+        if (snapshot.data!.exists && snapshot.data!.data() != null) {
+          final userData = snapshot.data!.data() as Map<String, dynamic>;
+          if (userData.containsKey('contacts') &&
+              userData['contacts'] != null) {
+            contactUserIds = List<String>.from(userData['contacts']);
+          }
+          if (userData.containsKey('groups') && userData['groups'] != null) {
+            groupIds = List<String>.from(userData['groups']);
+          }
+        }
+
+        return ListView.builder(
+            itemCount: contactUserIds.length + groupIds.length,
+            itemBuilder: (context, index) {
+              if (index < contactUserIds.length) {
+                return FutureBuilder<DocumentSnapshot>(
+                  future: FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(contactUserIds[index])
+                      .get(),
+                  builder: (context, contactSnapshot) {
+                    if (contactSnapshot.hasError) {
+                      return Container(
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          'Error fetching contact data',
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      );
+                    }
+
+                    if (contactSnapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return Container(
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.all(6.0),
+                        child: Text(
+                          'Loading contact...',
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      );
+                    }
+
+                    Map<String, dynamic> contactData =
+                        contactSnapshot.data!.data() as Map<String, dynamic>;
+                    String contactEmail = contactData['email'];
+
+                    return FutureBuilder<String?>(
+                      future: _image_service
+                          .getPfpUrlId(contactData['uid'] ?? 'empty'),
+                      builder: (context, imageUrlSnapshot) {
+                        if (imageUrlSnapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Container(
+                            alignment: Alignment.center,
+                            padding: const EdgeInsets.all(6.0),
+                            child: Text(
+                              'Loading image...',
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          );
+                        }
+
+                        String imageUrl = imageUrlSnapshot.data ?? 'empty';
+
+                        return ListTile(
+                          leading: ClipOval(
+                              child: Image.network(
+                            imageUrl.toString(),
+                            width: 50,
+                            height: 50,
+                          )),
+                          title: Text(
+                            contactEmail,
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ChatPage(
+                                  receiverUserEmail: contactEmail,
+                                  receiverUserID: contactUserIds[index],
+                                  imageUrl: imageUrl,
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
+                );
+              } else {
+                return FutureBuilder<DocumentSnapshot>(
+                  future: FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(groupIds[index - contactUserIds.length])
+                      .get(),
+                  builder: (context, groupSnapshot) {
+                    if (groupSnapshot.hasError) {
+                      return Container(
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          'Error fetching group data',
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      );
+                    }
+
+                    if (groupSnapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return Container(
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.all(6.0),
+                        child: Text(
+                          'Loading group...',
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      );
+                    }
+
+                    final userData =
+                        snapshot.data!.data() as Map<String, dynamic>;
+                    List<dynamic> groupNames = userData['groups'];
+
+                    return ListTile(
+                      title: Text(
+                        groupNames.join(', '),
+                        style: TextStyle(color: Color(0xFFECB365)),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => groupDisplay()),
+                        );
+                      },
+                    );
+                  },
+                );
+              }
+            });
       },
     );
   }
@@ -141,6 +309,7 @@ class _ChatTabState extends State<_ChatTab> {
         title: Text(data['username']),
         subtitle: Text(data['email']),
         onTap: () async {
+          // print(imageUrl);
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -197,16 +366,18 @@ class _StatusTabState extends State<_StatusTab> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              // Input field
               TextField(
                 controller: _inputController,
                 decoration: InputDecoration(labelText: 'Enter status'),
               ),
-              SizedBox(height: 16.0), 
+              SizedBox(height: 16.0), // Add some spacing
 
-
+              // Button
               ElevatedButton(
                 onPressed: () {
                   final Timestamp timestamp = Timestamp.now();
+                  // Handle button press (you can use _inputController.text for the input value)
                   print('Input Value: ${_inputController.text}');
                   editUserField('status', '${_inputController.text}');
                   editUserField('timestamp', timestamp.toString());
@@ -223,51 +394,52 @@ class _StatusTabState extends State<_StatusTab> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // Add a CircleAvatar here
-
-        ListTile(
-          leading: Icon(Icons.gesture),
-          title: Text("Update Status"),
-          onTap: () {
-            openInputDialog(context);
-          },
-        ),
-        Expanded(
-          child: StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection('users')
-                .orderBy('timestamp', descending: true)
-                .snapshots(),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return const Text('Error');
-              }
-
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Text('Loading...');
-              }
-
-              return ListView(
-                children: snapshot.data!.docs
-                    .map<Widget>((doc) => FutureBuilder<Widget>(
-                          future: _buildUserListItem(doc),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.done) {
-                              return snapshot.data!;
-                            } else {
-                              return const Text('loading user...');
-                            }
-                          },
-                        ))
-                    .toList(),
-              );
+    return Scaffold(
+      appBar: null, // Set the appBar to null to remove it
+      body: Column(
+        children: [
+          ListTile(
+            leading: Icon(Icons.gesture),
+            title: Text("Update Status"),
+            onTap: () {
+              openInputDialog(context);
             },
           ),
-        ),
-      ],
+          Expanded(
+            child: StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('users')
+                  .orderBy('timestamp', descending: true)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return const Text('Error');
+                }
+
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Text('Loading...');
+                }
+
+                return ListView(
+                  children: snapshot.data!.docs
+                      .map<Widget>((doc) => FutureBuilder<Widget>(
+                            future: _buildUserListItem(doc),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.done) {
+                                return snapshot.data!;
+                              } else {
+                                return const Text('loading user...');
+                              }
+                            },
+                          ))
+                      .toList(),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -280,28 +452,20 @@ class _StatusTabState extends State<_StatusTab> {
 
       return ListTile(
         leading: ClipOval(
-            child: Image.network(
-          imageUrl.toString(),
-          width: 50,
-          height: 50,
-        )),
+          child: Image.network(
+            imageUrl.toString(),
+            width: 50,
+            height: 50,
+          ),
+        ),
         title: Text(data['username']),
         subtitle: Text(data['status']),
         onTap: () {
-          // const groupdisplay(
-          //   email: '',
-          //   username: '',
-          //   pfpurl: '',
+          print("listtile running");
+          // Navigator.push(
+          //   context,
+          //   // Your navigation code here
           // );
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => groupdisplay(
-                      email: data['email'],
-                      username: data['username'],
-                      pfpurl: data['pfpurl'],
-                    )),
-          );
         },
       );
     } else {

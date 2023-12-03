@@ -224,6 +224,10 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
               ),
+              Container(
+                color: Colors.white,
+                height: 100,
+              )
             ],
           ),
         ),
