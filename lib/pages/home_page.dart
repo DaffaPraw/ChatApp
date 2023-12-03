@@ -97,7 +97,6 @@ class _HomePageState extends State<HomePage> {
         )),
         title: Text(data['email']),
         onTap: () async {
-          // print(imageUrl);
           Navigator.push(
             context,
             MaterialPageRoute(
