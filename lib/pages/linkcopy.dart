@@ -36,6 +36,12 @@ class _LinkCopyScreenState extends State<LinkCopyScreen> {
               ),
             ],
           ),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
         ),
         backgroundColor: const Color.fromARGB(255, 255, 255, 255),
         body: Container(
@@ -62,7 +68,8 @@ class _LinkCopyScreenState extends State<LinkCopyScreen> {
                 child: const CircleAvatar(
                   radius: 350,
                   backgroundImage: NetworkImage(
-                      'https://as1.ftcdn.net/v2/jpg/03/61/37/42/1000_F_361374260_iTq9Ac9Xr6Jl3gqigbf6IDWSAGo7wSTV.jpg'),
+                    'https://as1.ftcdn.net/v2/jpg/03/61/37/42/1000_F_361374260_iTq9Ac9Xr6Jl3gqigbf6IDWSAGo7wSTV.jpg',
+                  ),
                 ),
               ),
               const SizedBox(height: 20),
@@ -125,8 +132,7 @@ class _LinkCopyScreenState extends State<LinkCopyScreen> {
                                     actions: <Widget>[
                                       TextButton(
                                         onPressed: () {
-                                          Navigator.of(context)
-                                              .pop(); // Close the dialog
+                                          Navigator.of(context).pop();
                                         },
                                         child: Text('Close'),
                                       ),
@@ -136,6 +142,9 @@ class _LinkCopyScreenState extends State<LinkCopyScreen> {
                               );
                             },
                             child: Text("Copy link"),
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(Colors.orange),
+                            ),
                           ),
                           ElevatedButton(
                             onPressed: () {
@@ -148,8 +157,7 @@ class _LinkCopyScreenState extends State<LinkCopyScreen> {
                                     actions: <Widget>[
                                       TextButton(
                                         onPressed: () {
-                                          Navigator.of(context)
-                                              .pop(); // Close the dialog
+                                          Navigator.of(context).pop();
                                         },
                                         child: Text('email'),
                                       ),
@@ -159,6 +167,9 @@ class _LinkCopyScreenState extends State<LinkCopyScreen> {
                               );
                             },
                             child: Text("Share link"),
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(Colors.orange),
+                            ),
                           ),
                         ],
                       ),
