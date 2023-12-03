@@ -61,6 +61,7 @@ class _HomePageState extends State<HomePage> {
               Tab(text: 'Chat'),
               Tab(text: 'Status'),
             ],
+            indicatorColor: Colors.white,
           ),
         ),
         body: const TabBarView(

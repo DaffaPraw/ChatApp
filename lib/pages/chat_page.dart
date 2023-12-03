@@ -139,15 +139,27 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          leading: Padding(
-            padding: EdgeInsets.all(3),
-            child: CircleAvatar(
-                radius: 50,
-                backgroundImage: NetworkImage(
-                  widget.imageUrl,
-                )),
-          ),
-          title: Text(widget.receiverUserEmail)),
+        backgroundColor: Colors.orange[900],
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        title: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(3),
+              child: CircleAvatar(
+                radius: 20,
+                backgroundImage: NetworkImage(widget.imageUrl),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Text(widget.receiverUserEmail),
+          ],
+        ),
+      ),
       body: Column(
         children: [
           Expanded(
