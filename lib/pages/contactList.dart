@@ -127,7 +127,6 @@ class ContactList extends StatelessWidget {
     );
   }
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -171,46 +170,6 @@ class ContactList extends StatelessWidget {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => AddGroup()),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                ),
-                child: Container(
-                  color: Colors.white,
-                  height: 60.0,
-                  alignment: Alignment.topLeft,
-                  child: const Stack(
-                    children: <Widget>[
-                      Positioned(
-                        left: 5,
-                        top: 20,
-                        child: Icon(
-                          Icons.group_add_rounded,
-                          color: Colors.black,
-                        ),
-                      ),
-                      Positioned(
-                        left: 55,
-                        top: 20,
-                        child: Text(
-                          'New Group',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
               ElevatedButton(
                 onPressed: () {
                   Navigator.push(

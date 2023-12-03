@@ -31,21 +31,21 @@ class _SettingsScreenState extends State<PersonalData> {
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 20),
         child: Column(
-              children: [
-                AvatarCard(useremail: user?.email ?? 'empty'),
-                const SizedBox(height: 20),
-                const Divider(),
-                const SizedBox(height: 10),
-                Column(
-                  children: List.generate(
-                    settings.length,
-                    (index) => SettingTile(setting: settings3[index]),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                const Divider(),
-                const SizedBox(height: 10),
-              ],
+          children: [
+            AvatarCard(useremail: user?.email ?? 'empty'),
+            const SizedBox(height: 20),
+            const Divider(),
+            const SizedBox(height: 10),
+            Column(
+              children: List.generate(
+                settings.length,
+                (index) => SettingTile(setting: settings3[index]),
+              ),
+            ),
+            const SizedBox(height: 10),
+            const Divider(),
+            const SizedBox(height: 10),
+          ],
         ),
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:chat_app/components/text_field.dart';
+import 'package:chat_app/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -46,6 +47,10 @@ class _AddContactState extends State<AddContact> {
           SnackBar(
             content: Text('Contact added successfully.'),
           ),
+        );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -149,22 +154,29 @@ class _AddContactState extends State<AddContact> {
                     ),
                     const SizedBox(height: 2),
                     Container(
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(20),
-                          bottomRight: Radius.circular(20),
-                        ),
-                        color: Color.fromARGB(255, 230, 81, 0),
-                      ),
-                      alignment: Alignment.center,
-                      height: 40,
                       width: 400,
-                      child: MyButton(
-                          onTap: () {
-                            addContact(contactController.text);
-                          },
-                          text: "Add Contact"),
-                    )
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Add your button click logic here
+                          print("adding contact");
+                          addContact(contactController.text);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          // Customize the button style if needed
+                          primary: Colors.orange,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                        ),
+                        child: Text(
+                          "Add contact",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.0,
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               )

@@ -29,7 +29,7 @@ class _AddGroupState extends State<AddGroup> {
     await _fireStore.collection('groups').add(group);
 
     await _fireStore.collection('users').doc(currentUserId).update({
-      'groups': FieldValue.arrayUnion([groupName])
+      'groups(user)': FieldValue.arrayUnion([groupName])
     });
   }
 

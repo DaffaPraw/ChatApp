@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:chat_app/components/chat_bubble.dart';
 import 'package:chat_app/components/text_field.dart';
 import 'package:chat_app/services/chat/chat_service.dart';
+import 'package:chat_app/services/image_service.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,10 +13,12 @@ import 'package:image_picker/image_picker.dart';
 class ChatPage extends StatefulWidget {
   final String receiverUserEmail;
   final String receiverUserID;
+  final String imageUrl;
   const ChatPage({
     super.key,
     required this.receiverUserEmail,
     required this.receiverUserID,
+    required this.imageUrl,
   });
 
   @override
@@ -24,6 +27,7 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   final TextEditingController _messageController = TextEditingController();
+  final image_service _image_service = image_service();
   final ChatService _chatService = ChatService();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseStorage storage = FirebaseStorage.instance;
@@ -34,11 +38,8 @@ class _ChatPageState extends State<ChatPage> {
   void sendMessage() async {
     if (_messageController.text.isNotEmpty) {
       await _chatService.sendMessage(
-        widget.receiverUserID,
-        _messageController.text,
-        '',
-        replyToMessage: lastTappedMessage,
-      );
+          widget.receiverUserID, _messageController.text, '',
+          replyToMessage: lastTappedMessage);
 
       _messageController.clear();
       setState(() {
@@ -142,7 +143,28 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.receiverUserEmail)),
+      appBar: AppBar(
+        backgroundColor: Colors.orange[900],
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        title: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(3),
+              child: CircleAvatar(
+                radius: 20,
+                backgroundImage: NetworkImage(widget.imageUrl),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Text(widget.receiverUserEmail),
+          ],
+        ),
+      ),
       body: Column(
         children: [
           Expanded(
@@ -164,15 +186,14 @@ class _ChatPageState extends State<ChatPage> {
           return Text('Error${snapshot.error}');
         }
 
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Text('Loading...');
+        }
         if (!snapshot.hasData ||
             snapshot.data == null ||
             snapshot.data!.docs.isEmpty) {
           return Center(
               child: Text('This is a start of your new conversation!!'));
-        }
-
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Text('Loading...');
         }
 
         return ListView(
