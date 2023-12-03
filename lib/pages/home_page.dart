@@ -1,6 +1,8 @@
 import 'package:chat_app/pages/chat_page.dart';
 import 'package:chat_app/pages/profile.dart';
+import 'package:chat_app/services/auth/auth_gate.dart';
 import 'package:chat_app/services/auth/auth_service.dart';
+import 'package:chat_app/services/auth/login_or_register.dart';
 import 'package:chat_app/services/image_service.dart';
 import 'package:chat_app/setting/screen/setting_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -17,11 +19,16 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final image_service _image_service = image_service();
 
   void signOut() {
     final authService = Provider.of<AuthService>(context, listen: false);
     authService.signOut();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const AuthGate(),
+      ),
+    );
   }
 
   void settings() {
@@ -77,18 +84,6 @@ class _ChatTabState extends State<_ChatTab> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final image_service _image_service = image_service();
 
-  void signOut() {
-    final authService = Provider.of<AuthService>(context, listen: false);
-    authService.signOut();
-  }
-
-  void settings() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const SettingsScreen()),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -140,7 +135,8 @@ class _ChatTabState extends State<_ChatTab> {
           width: 50,
           height: 50,
         )),
-        title: Text(data['email']),
+        title: Text(data['username']),
+        subtitle: Text(data['email']),
         onTap: () async {
           // print(imageUrl);
           Navigator.push(
@@ -175,11 +171,8 @@ class _StatusTabState extends State<_StatusTab> {
 
   Future<void> editUserField(String field, String update) async {
     try {
-      // Replace 'users' with the actual name of your Firestore collection
       CollectionReference usersCollection =
           FirebaseFirestore.instance.collection('users');
-
-      // Update the 'email' field of the specified user document
       await usersCollection.doc(user?.uid ?? 'empty').update({
         field: update,
       });
@@ -292,7 +285,7 @@ class _StatusTabState extends State<_StatusTab> {
           width: 50,
           height: 50,
         )),
-        title: Text(data['email']),
+        title: Text(data['username']),
         subtitle: Text(data['status']),
         onTap: () {
           print("listtile running");

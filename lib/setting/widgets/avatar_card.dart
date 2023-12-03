@@ -21,6 +21,7 @@ class AvatarCard extends StatefulWidget {
 
 class _AvatarCardState extends State<AvatarCard> {
   String? imageUrl;
+  String? username;
 
   final image_service _image_service = image_service();
   User? user = FirebaseAuth.instance.currentUser;
@@ -31,7 +32,8 @@ class _AvatarCardState extends State<AvatarCard> {
 
     // Your code to run when the page is opened or updated
     if (ModalRoute.of(context)!.isCurrent) {
-      imageUrl = await getPfpUrl();
+      username = await getField('username');
+      imageUrl = await getField('pfpurl');
       setState(() {});
     }
   }
@@ -59,7 +61,7 @@ class _AvatarCardState extends State<AvatarCard> {
     }
   }
 
-  Future<void> editUserPfp(String newpfpurl) async {
+  Future<void> editFieldItem(String field, String item) async {
     try {
       // Replace 'users' with the actual name of your Firestore collection
       CollectionReference usersCollection =
@@ -67,13 +69,13 @@ class _AvatarCardState extends State<AvatarCard> {
 
       // Update the 'email' field of the specified user document
       await usersCollection.doc(user?.uid ?? 'empty').update({
-        'pfpurl': newpfpurl,
+        field: item,
       });
 
-      print('Pfpurl updated successfully');
+      print('item updated successfully');
       setState(() {});
     } catch (e) {
-      print('Error updating user pfpurl: $e');
+      print('Error updating user item: $e');
     }
   }
 
@@ -92,7 +94,7 @@ class _AvatarCardState extends State<AvatarCard> {
 
                       // Check if imagePath is not null before calling editUserPfp
                       if (imagePath != null) {
-                        editUserPfp(await imagePath);
+                        editFieldItem("pfpurl", await imagePath);
                       } else {
                         print(
                             'Image path is null. Cannot update user profile picture.');
@@ -109,7 +111,7 @@ class _AvatarCardState extends State<AvatarCard> {
 
                       // Check if imagePath is not null before calling editUserPfp
                       if (imagePath != null) {
-                        editUserPfp(await imagePath);
+                        editFieldItem("pfpurl", await imagePath);
                       } else {
                         print(
                             'Image path is null. Cannot update user profile picture.');
@@ -125,7 +127,7 @@ class _AvatarCardState extends State<AvatarCard> {
         });
   }
 
-  Future<String?> getPfpUrl() async {
+  Future<String?> getField(String field) async {
     try {
       // Replace 'your_collection_name' with the actual name of your Firestore collection
       CollectionReference collection =
@@ -140,11 +142,11 @@ class _AvatarCardState extends State<AvatarCard> {
             documentSnapshot.data() as Map<String, dynamic>;
 
         // Access and print the data
-        String pfpurl = await documentSnapshot['pfpurl'];
-        return (pfpurl);
+        String item = await documentSnapshot[field];
         setState(() {});
+        return (item);
       } else {
-        print('pfp not there');
+        print('item not there');
       }
     } catch (e) {
       print('Error reading data: $e');
@@ -160,7 +162,7 @@ class _AvatarCardState extends State<AvatarCard> {
             // print(user?.uid ?? 'empty');
 
             openMediaDialog();
-            imageUrl = await getPfpUrl();
+            imageUrl = await getField('pfpurl');
             setState(() {});
 
             // print(await getPfpUrl());
@@ -176,16 +178,64 @@ class _AvatarCardState extends State<AvatarCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              widget.useremail,
-              style: TextStyle(
-                fontSize: kbigFontSize,
-                fontWeight: FontWeight.bold,
-                color: kprimaryColor,
+            GestureDetector(
+              onTap: () async {
+                setState(() {});
+                TextEditingController _inputController =
+                    TextEditingController();
+
+                await showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Change username'),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // Input field
+                          TextField(
+                            controller: _inputController,
+                            decoration:
+                                InputDecoration(labelText: 'Enter username'),
+                          ),
+                          SizedBox(height: 16.0), // Add some spacing
+
+                          // Button
+                          ElevatedButton(
+                            onPressed: () {
+                              final Timestamp timestamp = Timestamp.now();
+                              // Handle button press (you can use _inputController.text for the input value)
+                              print('Input Value: ${_inputController.text}');
+                              editFieldItem(
+                                  'username', '${_inputController.text}');
+
+                              print('masih jalan');
+                              Navigator.of(context).pop(); // Close the dialog
+
+                              print('ini juga masih jalan');
+                              setState(() {});
+                            },
+                            child: Text('Set username'),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+                print('ini jalan juga ga sih');
+                username = await getField('username');
+              },
+              child: Text(
+                username ?? 'empty',
+                style: TextStyle(
+                  fontSize: kbigFontSize,
+                  fontWeight: FontWeight.bold,
+                  color: kprimaryColor,
+                ),
               ),
             ),
             Text(
-              "Halo Saya User!",
+              widget.useremail,
               style: TextStyle(
                 fontSize: ksmallFontSize,
                 color: Colors.grey.shade600,
