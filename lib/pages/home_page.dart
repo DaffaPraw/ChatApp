@@ -17,6 +17,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final image_service _image_service = image_service();
 
   void signOut() {
     final authService = Provider.of<AuthService>(context, listen: false);

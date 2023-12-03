@@ -37,6 +37,7 @@ class MyApp extends StatelessWidget {
         '/datausage': (context) => const DataUsages(),
         '/logout': (context) => const AuthGate(),
       },
+      
       debugShowCheckedModeBanner: false,
       home: AuthGate(),
     );
