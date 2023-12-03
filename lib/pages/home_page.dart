@@ -87,19 +87,16 @@ class _HomePageState extends State<HomePage> {
     if (_auth.currentUser!.email != data['email']) {
       String imageUrl =
           await _image_service.getPfpUrlId(data['uid'] ?? 'empty') ?? 'empty';
-      print(imageUrl);
 
       return ListTile(
         leading: ClipOval(
             child: Image.network(
           imageUrl.toString(),
-          // "https://firebasestorage.googleapis.com/v0/b/chatapp-dfdd5.appspot.com/o/images%2Favatar-male.png?alt=media&token=24f15f9f-5eb4-4071-9b10-462a2b948353",
           width: 50,
           height: 50,
         )),
         title: Text(data['email']),
         onTap: () async {
-          // print(imageUrl);
           Navigator.push(
             context,
             MaterialPageRoute(
