@@ -1,3 +1,4 @@
+import 'package:chat_app/pages/customer_service.dart';
 import 'package:chat_app/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'add_contact.dart';
@@ -223,13 +224,85 @@ class ContactList extends StatelessWidget {
 
               //add contacts list
 
-              iconbutt(
-                Icons.share,
-                'Share invite link',
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AddContact()),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                ),
+                child: Container(
+                  color: Colors.white,
+                  height: 60.0,
+                  alignment: Alignment.topLeft,
+                  child: const Stack(
+                    children: <Widget>[
+                      Positioned(
+                        left: 5,
+                        top: 20,
+                        child: Icon(
+                          Icons.share,
+                          color: Colors.black,
+                        ),
+                      ),
+                      Positioned(
+                        left: 55,
+                        top: 20,
+                        child: Text(
+                          'Share invite link',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-              iconbutt(
-                Icons.question_mark_rounded,
-                'Contacts help',
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => customerservice()),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                ),
+                child: Container(
+                  color: Colors.white,
+                  height: 60.0,
+                  alignment: Alignment.topLeft,
+                  child: const Stack(
+                    children: <Widget>[
+                      Positioned(
+                        left: 5,
+                        top: 20,
+                        child: Icon(
+                          Icons.question_mark_rounded,
+                          color: Colors.black,
+                        ),
+                      ),
+                      Positioned(
+                        left: 55,
+                        top: 20,
+                        child: Text(
+                          'Contacts help',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),
