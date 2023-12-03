@@ -17,6 +17,63 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  void signOut() {
+    final authService = Provider.of<AuthService>(context, listen: false);
+    authService.signOut();
+  }
+
+  void settings() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const SettingsScreen()),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 2, // Number of tabs
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Home Page'),
+          actions: [
+            IconButton(
+              onPressed: signOut,
+              icon: const Icon(Icons.logout),
+            ),
+            IconButton(
+              onPressed: settings,
+              icon: const Icon(Icons.settings),
+            )
+          ],
+          bottom: const TabBar(
+            tabs: [
+              Tab(text: 'Chat'),
+              Tab(text: 'Status'),
+            ],
+          ),
+        ),
+        body: const TabBarView(
+          children: [
+            _ChatTab(),
+            _StatusTab(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ChatTab extends StatefulWidget {
+  const _ChatTab({Key? key}) : super(key: key);
+
+  @override
+  _ChatTabState createState() => _ChatTabState();
+}
+
+class _ChatTabState extends State<_ChatTab> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final image_service _image_service = image_service();
 
   void signOut() {
@@ -34,19 +91,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Home Page'),
-        actions: [
-          IconButton(
-            onPressed: signOut,
-            icon: const Icon(Icons.logout),
-          ),
-          IconButton(
-            onPressed: settings,
-            icon: const Icon(Icons.settings),
-          )
-        ],
-      ),
       body: _buildUserList(),
     );
   }
@@ -97,6 +141,7 @@ class _HomePageState extends State<HomePage> {
         )),
         title: Text(data['email']),
         onTap: () async {
+          // print(imageUrl);
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -107,6 +152,152 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           );
+        },
+      );
+    } else {
+      return Container();
+    }
+  }
+}
+
+class _StatusTab extends StatefulWidget {
+  const _StatusTab({Key? key}) : super(key: key);
+
+  @override
+  _StatusTabState createState() => _StatusTabState();
+}
+
+class _StatusTabState extends State<_StatusTab> {
+  User? user = FirebaseAuth.instance.currentUser;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final image_service _image_service = image_service();
+
+  Future<void> editUserField(String field, String update) async {
+    try {
+      // Replace 'users' with the actual name of your Firestore collection
+      CollectionReference usersCollection =
+          FirebaseFirestore.instance.collection('users');
+
+      // Update the 'email' field of the specified user document
+      await usersCollection.doc(user?.uid ?? 'empty').update({
+        field: update,
+      });
+
+      print('Pfpurl updated successfully');
+      setState(() {});
+    } catch (e) {
+      print('Error updating user pfpurl: $e');
+    }
+  }
+
+  void openInputDialog(BuildContext context) {
+    TextEditingController _inputController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Update Status'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Input field
+              TextField(
+                controller: _inputController,
+                decoration: InputDecoration(labelText: 'Enter status'),
+              ),
+              SizedBox(height: 16.0), // Add some spacing
+
+              // Button
+              ElevatedButton(
+                onPressed: () {
+                  final Timestamp timestamp = Timestamp.now();
+                  // Handle button press (you can use _inputController.text for the input value)
+                  print('Input Value: ${_inputController.text}');
+                  editUserField('status', '${_inputController.text}');
+                  editUserField('timestamp', timestamp.toString());
+                  Navigator.of(context).pop(); // Close the dialog
+                },
+                child: Text('Set status'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        // Add a CircleAvatar here
+
+        ListTile(
+          leading: Icon(Icons.gesture),
+          title: Text("Update Status"),
+          onTap: () {
+            openInputDialog(context);
+          },
+        ),
+        Expanded(
+          child: StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection('users')
+                .orderBy('timestamp', descending: true)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return const Text('Error');
+              }
+
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Text('Loading...');
+              }
+
+              return ListView(
+                children: snapshot.data!.docs
+                    .map<Widget>((doc) => FutureBuilder<Widget>(
+                          future: _buildUserListItem(doc),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              return snapshot.data!;
+                            } else {
+                              return const Text('loading user...');
+                            }
+                          },
+                        ))
+                    .toList(),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Future<Widget> _buildUserListItem(DocumentSnapshot document) async {
+    Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+
+    if (data['status'] != "") {
+      String imageUrl =
+          await _image_service.getPfpUrlId(data['uid'] ?? 'empty') ?? 'empty';
+
+      return ListTile(
+        leading: ClipOval(
+            child: Image.network(
+          imageUrl.toString(),
+          width: 50,
+          height: 50,
+        )),
+        title: Text(data['email']),
+        subtitle: Text(data['status']),
+        onTap: () {
+          print("listtile running");
+          // Navigator.push(
+
+          // );
         },
       );
     } else {
