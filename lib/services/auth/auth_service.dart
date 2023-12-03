@@ -20,8 +20,6 @@ class AuthService extends ChangeNotifier {
         'uid': userCredential.user!.uid,
         'email': email,
         'phone': '',
-        'pfpurl':
-            'https://firebasestorage.googleapis.com/v0/b/chatapp-dfdd5.appspot.com/o/images%2Favatar.jpg?alt=media&token=988476bd-3aa7-4226-83a2-46b564c5972f',
       }, SetOptions(merge: true));
 
       return userCredential;
