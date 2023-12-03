@@ -19,7 +19,6 @@ class AuthService extends ChangeNotifier {
       _fireStore.collection('users').doc(userCredential.user!.uid).set({
         'uid': userCredential.user!.uid,
         'email': email,
-        'username': '',
         'phone': '',
         'pfpurl':
             'https://firebasestorage.googleapis.com/v0/b/chatapp-dfdd5.appspot.com/o/images%2Favatar.jpg?alt=media&token=988476bd-3aa7-4226-83a2-46b564c5972f',

@@ -62,7 +62,7 @@ class _ProfileState extends State<Profile> {
                     }
                   },
                   child: CircleAvatar(
-                    radius: 80.0,
+                    radius: 50.0,
                     backgroundColor: Colors.red,
                     backgroundImage: NetworkImage(imageUrl),
                   ),

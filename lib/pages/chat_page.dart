@@ -137,30 +137,17 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: AppBar(
-      leading: IconButton(
-        icon: Icon(Icons.arrow_back),
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      ),
-      title: Row(
-        children: [
-          Padding(
+    return Scaffold(
+      appBar: AppBar(
+          leading: Padding(
             padding: EdgeInsets.all(3),
             child: CircleAvatar(
-              radius: 25,
-              backgroundImage: NetworkImage(
-                widget.imageUrl,
-              ),
-            ),
+                radius: 50,
+                backgroundImage: NetworkImage(
+                  widget.imageUrl,
+                )),
           ),
-          SizedBox(width: 8), // Adjust the spacing between the avatar and the title
-          Text(widget.receiverUserEmail),
-        ],
-      ),
-    ),
+          title: Text(widget.receiverUserEmail)),
       body: Column(
         children: [
           Expanded(
