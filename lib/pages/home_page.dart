@@ -1,4 +1,5 @@
 import 'package:chat_app/pages/chat_page.dart';
+import 'package:chat_app/pages/userdisplay.dart';
 import 'package:chat_app/services/auth/auth_gate.dart';
 import 'package:chat_app/services/auth/auth_service.dart';
 import 'package:chat_app/services/image_service.dart';
@@ -462,10 +463,16 @@ class _StatusTabState extends State<_StatusTab> {
         subtitle: Text(data['status']),
         onTap: () {
           print("listtile running");
-          // Navigator.push(
-          //   context,
-          //   // Your navigation code here
-          // );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => groupdisplay(
+                email: data['email'],
+                username: data['username'],
+                pfpurl: data['pfpurl'],
+              ),
+            ),
+          );
         },
       );
     } else {
