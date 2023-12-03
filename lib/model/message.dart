@@ -8,6 +8,7 @@ class Message {
   final String message;
   final Timestamp timestamp;
   final String image;
+  final String? replyToMessage;
 
   Message({
     required this.senderId,
@@ -16,6 +17,7 @@ class Message {
     required this.timestamp,
     required this.message,
     required this.image,
+    this.replyToMessage,
   });
 
   Map<String, dynamic> toMap() {
@@ -26,6 +28,7 @@ class Message {
       'message': message,
       'image': image,
       'timestamp': timestamp,
+      'replyToMessage': replyToMessage,
     };
   }
 }
