@@ -19,6 +19,7 @@ class _SettingsScreenState extends State<Notifications> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.orange[900],
         title: Text('Notifications'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),

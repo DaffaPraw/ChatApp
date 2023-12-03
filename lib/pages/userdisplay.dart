@@ -130,7 +130,6 @@ class _groupdisplayState extends State<groupdisplay> {
     );
   }
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -138,6 +137,12 @@ class _groupdisplayState extends State<groupdisplay> {
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.orange[900],
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
           title: Row(
             children: [
               SizedBox(width: 10.0),
@@ -176,7 +181,6 @@ class _groupdisplayState extends State<groupdisplay> {
                     ),
                   ),
                 ),
-                // Add more widgets to the Stack if needed
               ],
             ),
             Container(

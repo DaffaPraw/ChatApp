@@ -20,6 +20,7 @@ class _SettingsScreenState extends State<PersonalData> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.orange[900],
         title: Text('Personal Data'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
