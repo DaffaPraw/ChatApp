@@ -44,6 +44,7 @@ class _HomePageState extends State<HomePage> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           backgroundColor: Colors.orange[900],
           title: const Text('ChatinAja'),
           actions: [
@@ -211,7 +212,7 @@ class _ChatTabState extends State<_ChatTab> {
                           )),
                           title: Text(
                             contactEmail,
-                            style: TextStyle(color: Color(0xFFECB365)),
+                            style: TextStyle(color: Colors.black),
                           ),
                           onTap: () {
                             Navigator.push(
