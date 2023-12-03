@@ -1,3 +1,12 @@
+import 'package:chat_app/pages/register_page.dart';
+import 'package:chat_app/services/login_register.dart';
+import 'package:chat_app/setting/models/setting.dart';
+import 'package:chat_app/setting/screen/inner_setting/datausage.dart';
+import 'package:chat_app/setting/screen/inner_setting/notification.dart';
+import 'package:flutter/material.dart';
+import 'package:chat_app/setting/screen/setting_screen.dart';
+import 'package:chat_app/setting/screen/inner_setting/personal.dart';
+import 'package:chat_app/setting/screen/inner_setting/notification.dart';
 import 'package:chat_app/firebase_options.dart';
 import 'package:chat_app/services/auth/auth_gate.dart';
 import 'package:chat_app/services/auth/auth_service.dart';
@@ -21,7 +30,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      routes: {
+        '/personal': (context) => const PersonalData(),
+        '/notification': (context) => const Notifications(),
+        '/datausage': (context) => const DataUsages(),
+        '/logout': (context) => const AuthGate(),
+      },
       debugShowCheckedModeBanner: false,
       home: AuthGate(),
     );

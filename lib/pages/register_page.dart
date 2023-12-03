@@ -1,5 +1,6 @@
 import 'package:chat_app/components/button.dart';
 import 'package:chat_app/components/text_field.dart';
+import 'package:chat_app/pages/profilesetting.dart';
 import 'package:chat_app/services/auth/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +19,6 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  // text controllers
   final emailController = TextEditingController();
   final passController = TextEditingController();
   final passConfirmController = TextEditingController();
@@ -173,7 +173,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           const SizedBox(width: 5),
                           GestureDetector(
                             onTap: widget.onTap,
-                            child: Text("Create an Account",
+                            child: Text("Register Account",
                                 style: TextStyle(
                                   color: Color(0xFFECB365),
                                   fontWeight: FontWeight.bold,
@@ -186,7 +186,16 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       GestureDetector(
                         onTap: () {
+                          // seharusnya signup
+
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //       builder: (context) => profilesetting()),
+                          // );
+
                           signUp();
+                          // return const profilesetting();
                         },
                         child: Container(
                           height: 50,

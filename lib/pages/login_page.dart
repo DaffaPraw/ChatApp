@@ -1,11 +1,11 @@
 import 'package:chat_app/components/button.dart';
 import 'package:chat_app/components/text_field.dart';
+import 'package:chat_app/pages/home_page.dart';
 import 'package:chat_app/services/auth/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
-  // functions
   final void Function()? onTap;
 
   const LoginPage({
@@ -18,7 +18,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // text controllers
   final emailController = TextEditingController();
   final passController = TextEditingController();
 
@@ -31,6 +30,10 @@ class _LoginPageState extends State<LoginPage> {
         passController.text,
       );
       print("sign in");
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const HomePage()),
+      );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
