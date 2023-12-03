@@ -139,154 +139,154 @@ class _ChatTabState extends State<_ChatTab> {
         }
 
         return ListView.builder(
-          itemCount: contactUserIds.length + groupIds.length,
-          itemBuilder: (context, index) {
-            if (index < contactUserIds.length) {
-              return FutureBuilder<DocumentSnapshot>(
-                future: FirebaseFirestore.instance
-                    .collection('users')
-                    .doc(contactUserIds[index])
-                    .get(),
-                builder: (context, contactSnapshot) {
-                  if (contactSnapshot.hasError) {
-                    return Container(
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.all(16.0),
-                      child: Text(
-                        'Error fetching contact data',
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    );
-                  }
-
-                  if (contactSnapshot.connectionState ==
-                      ConnectionState.waiting) {
-                    return Container(
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.all(6.0),
-                      child: Text(
-                        'Loading contact...',
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    );
-                  }
-
-                  Map<String, dynamic> contactData =
-                      contactSnapshot.data!.data() as Map<String, dynamic>;
-                  String contactEmail = contactData['email'];
-
-                  return FutureBuilder<String?>(
-                    future: _image_service
-                        .getPfpUrlId(contactData['uid'] ?? 'empty'),
-                    builder: (context, imageUrlSnapshot) {
-                      if (imageUrlSnapshot.connectionState ==
-                          ConnectionState.waiting) {
-                        return Container(
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.all(6.0),
-                          child: Text(
-                            'Loading image...',
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                            ),
+            itemCount: contactUserIds.length + groupIds.length,
+            itemBuilder: (context, index) {
+              if (index < contactUserIds.length) {
+                return FutureBuilder<DocumentSnapshot>(
+                  future: FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(contactUserIds[index])
+                      .get(),
+                  builder: (context, contactSnapshot) {
+                    if (contactSnapshot.hasError) {
+                      return Container(
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          'Error fetching contact data',
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
                           ),
-                        );
-                      }
-
-                      String imageUrl = imageUrlSnapshot.data ?? 'empty';
-
-                      return ListTile(
-                        leading: ClipOval(
-                            child: Image.network(
-                          imageUrl.toString(),
-                          width: 50,
-                          height: 50,
-                        )),
-                        title: Text(
-                          contactEmail,
-                          style: TextStyle(color: Color(0xFFECB365)),
                         ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ChatPage(
-                                receiverUserEmail: contactEmail,
-                                receiverUserID: contactUserIds[index],
-                                imageUrl: imageUrl,
+                      );
+                    }
+
+                    if (contactSnapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return Container(
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.all(6.0),
+                        child: Text(
+                          'Loading contact...',
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      );
+                    }
+
+                    Map<String, dynamic> contactData =
+                        contactSnapshot.data!.data() as Map<String, dynamic>;
+                    String contactEmail = contactData['email'];
+
+                    return FutureBuilder<String?>(
+                      future: _image_service
+                          .getPfpUrlId(contactData['uid'] ?? 'empty'),
+                      builder: (context, imageUrlSnapshot) {
+                        if (imageUrlSnapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Container(
+                            alignment: Alignment.center,
+                            padding: const EdgeInsets.all(6.0),
+                            child: Text(
+                              'Loading image...',
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           );
-                        },
-                      );
-                    },
-                  );
-                },
-              );
-            } else {
-              return FutureBuilder<DocumentSnapshot>(
-                future: FirebaseFirestore.instance
-                    .collection('users')
-                    .doc(groupIds[index - contactUserIds.length])
-                    .get(),
-                builder: (context, groupSnapshot) {
-                  if (groupSnapshot.hasError) {
-                    return Container(
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.all(16.0),
-                      child: Text(
-                        'Error fetching group data',
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                        }
+
+                        String imageUrl = imageUrlSnapshot.data ?? 'empty';
+
+                        return ListTile(
+                          leading: ClipOval(
+                              child: Image.network(
+                            imageUrl.toString(),
+                            width: 50,
+                            height: 50,
+                          )),
+                          title: Text(
+                            contactEmail,
+                            style: TextStyle(color: Color(0xFFECB365)),
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ChatPage(
+                                  receiverUserEmail: contactEmail,
+                                  receiverUserID: contactUserIds[index],
+                                  imageUrl: imageUrl,
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
                     );
-                  }
-
-                  if (groupSnapshot.connectionState ==
-                      ConnectionState.waiting) {
-                    return Container(
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.all(6.0),
-                      child: Text(
-                        'Loading group...',
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
+                  },
+                );
+              } else {
+                return FutureBuilder<DocumentSnapshot>(
+                  future: FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(groupIds[index - contactUserIds.length])
+                      .get(),
+                  builder: (context, groupSnapshot) {
+                    if (groupSnapshot.hasError) {
+                      return Container(
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          'Error fetching group data',
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                    );
-                  }
-
-                  final userData =
-                      snapshot.data!.data() as Map<String, dynamic>;
-                  List<dynamic> groupNames = userData['groups'];
-
-                  return ListTile(
-                    title: Text(
-                      groupNames.join(', '),
-                      style: TextStyle(color: Color(0xFFECB365)),
-                    ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => groupDisplay()),
                       );
-                    },
-                  );
-                },
-              );
-            }
-          },
-        );
+                    }
+
+                    if (groupSnapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return Container(
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.all(6.0),
+                        child: Text(
+                          'Loading group...',
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      );
+                    }
+
+                    final userData =
+                        snapshot.data!.data() as Map<String, dynamic>;
+                    List<dynamic> groupNames = userData['groups'];
+
+                    return ListTile(
+                      title: Text(
+                        groupNames.join(', '),
+                        style: TextStyle(color: Color(0xFFECB365)),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => groupDisplay()),
+                        );
+                      },
+                    );
+                  },
+                );
+              }
+            });
       },
     );
   }
