@@ -42,10 +42,11 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2, // Number of tabs
+      length: 2, 
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Home Page'),
+          backgroundColor: Colors.orange[900],
+          title: const Text('ChatinAja'),
           actions: [
             IconButton(
               onPressed: signOut,
@@ -61,6 +62,7 @@ class _HomePageState extends State<HomePage> {
               Tab(text: 'Chat'),
               Tab(text: 'Status'),
             ],
+            indicatorColor: Colors.white,
           ),
         ),
         body: const TabBarView(
@@ -139,7 +141,6 @@ class _ChatTabState extends State<_ChatTab> {
         title: Text(data['username']),
         subtitle: Text(data['email']),
         onTap: () async {
-          // print(imageUrl);
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -196,18 +197,16 @@ class _StatusTabState extends State<_StatusTab> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Input field
               TextField(
                 controller: _inputController,
                 decoration: InputDecoration(labelText: 'Enter status'),
               ),
-              SizedBox(height: 16.0), // Add some spacing
+              SizedBox(height: 16.0), 
 
-              // Button
+
               ElevatedButton(
                 onPressed: () {
                   final Timestamp timestamp = Timestamp.now();
-                  // Handle button press (you can use _inputController.text for the input value)
                   print('Input Value: ${_inputController.text}');
                   editUserField('status', '${_inputController.text}');
                   editUserField('timestamp', timestamp.toString());
