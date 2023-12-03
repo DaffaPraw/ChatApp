@@ -44,6 +44,7 @@ class _HomePageState extends State<HomePage> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           backgroundColor: Colors.orange[900],
           title: const Text('ChatinAja'),
           actions: [
@@ -460,20 +461,11 @@ class _StatusTabState extends State<_StatusTab> {
         title: Text(data['username']),
         subtitle: Text(data['status']),
         onTap: () {
-          // const groupdisplay(
-          //   email: '',
-          //   username: '',
-          //   pfpurl: '',
+          print("listtile running");
+          // Navigator.push(
+          //   context,
+          //   // Your navigation code here
           // );
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => groupdisplay(
-                      email: data['email'],
-                      username: data['username'],
-                      pfpurl: data['pfpurl'],
-                    )),
-          );
         },
       );
     } else {

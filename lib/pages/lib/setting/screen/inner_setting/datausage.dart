@@ -7,20 +7,19 @@ import 'package:chat_app/setting/widgets/avatar_card.dart';
 import 'package:chat_app/setting/widgets/setting_tile.dart';
 import 'package:chat_app/setting/widgets/motto_card.dart';
 
-class Notifications extends StatefulWidget {
-  const Notifications({super.key});
+class DataUsages extends StatefulWidget {
+  const DataUsages({super.key});
 
   @override
-  State<Notifications> createState() => _SettingsScreenState();
+  State<DataUsages> createState() => _SettingsScreenState();
 }
 
-class _SettingsScreenState extends State<Notifications> {
+class _SettingsScreenState extends State<DataUsages> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.orange[900],
-        title: Text('Notifications'),
+        title: Text('Data Usage and Proxy'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -31,11 +30,21 @@ class _SettingsScreenState extends State<Notifications> {
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 20),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text(
+                  'Media Auto-Download',
+                  style: TextStyle(
+                    color: kprimaryColor,
+                    fontSize: ksmallFontSize,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
                 Column(
                   children: List.generate(
                     settings.length,
-                    (index) => InnerSettingSwitch(setting: settings4[index]),
+                    (index) => InnerSettingSwitch(setting: settings5[index]),
                   ),
                 ),
                 const SizedBox(height: 10),

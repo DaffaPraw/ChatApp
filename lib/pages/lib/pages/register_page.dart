@@ -1,48 +1,50 @@
 import 'package:chat_app/components/button.dart';
 import 'package:chat_app/components/text_field.dart';
-import 'package:chat_app/pages/home_page.dart';
+import 'package:chat_app/pages/profilesetting.dart';
 import 'package:chat_app/services/auth/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class LoginPage extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
+  // functions
   final void Function()? onTap;
 
-  const LoginPage({
+  const RegisterPage({
     super.key,
     required this.onTap,
   });
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final emailController = TextEditingController();
   final passController = TextEditingController();
+  final passConfirmController = TextEditingController();
 
-  void signIn() async {
-    final authService = Provider.of<AuthService>(context, listen: false);
-
-    try {
-      await authService.signInWithEmailandPassword(
-        emailController.text,
-        passController.text,
-      );
-      print("sign in");
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
-      );
-    } catch (e) {
+  void signUp() async {
+    if (passController.text != passConfirmController.text) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            e.toString(),
-          ),
+        const SnackBar(
+          content: Text("Passwords do not match"),
         ),
       );
-      print("sign in");
+    } else {
+      final authService = Provider.of<AuthService>(context, listen: false);
+
+      try {
+        await authService.signUpWithEmailandPassword(
+          emailController.text,
+          passController.text,
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(e.toString()),
+          ),
+        );
+      }
     }
   }
 
@@ -82,7 +84,7 @@ class _LoginPageState extends State<LoginPage> {
                       height: 10,
                     ),
                     Text(
-                      "Please login your account",
+                      "Please Register your account",
                       style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
                   ],
@@ -153,6 +155,23 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                             ),
+                            Container(
+                              padding: EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(color: Colors.grey[200]!),
+                                ),
+                              ),
+                              child: TextField(
+                                obscureText: true,
+                                controller: passConfirmController,
+                                decoration: InputDecoration(
+                                  hintText: " Confirm Password",
+                                  hintStyle: TextStyle(color: Colors.grey),
+                                  border: InputBorder.none,
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -161,14 +180,14 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       Row(
                         children: [
-                          Text("Don't have an account?",
+                          Text("Already have an Account?",
                               style: TextStyle(
                                 color: Color(0xFFECB365),
                               )),
                           const SizedBox(width: 5),
                           GestureDetector(
                             onTap: widget.onTap,
-                            child: Text("Create an Account",
+                            child: Text("Sign In",
                                 style: TextStyle(
                                   color: Color(0xFFECB365),
                                   fontWeight: FontWeight.bold,
@@ -181,7 +200,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          signIn();
+                          signUp();
                         },
                         child: Container(
                           height: 50,
@@ -192,7 +211,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           child: Center(
                             child: Text(
-                              "Login",
+                              "Sign Up",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -207,7 +226,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               Container(
                 color: Colors.white,
-                height: 300,
+                height: 100,
               )
             ],
           ),
