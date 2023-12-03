@@ -263,7 +263,7 @@ class _profilesettingState extends State<profilesetting> {
                         child: TextField(
                           controller: usernameController,
                           decoration: InputDecoration(
-                              hintText: "Email",
+                              hintText: "Enter Username",
                               hintStyle: TextStyle(color: Colors.grey),
                               border: InputBorder.none),
                         ),
