@@ -1,16 +1,10 @@
-# chat_app
+# chat_app ChatinAja
 
-A new Flutter project.
+KELOMPOK:
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Daffa Prawira			535220199
+Jason Wiedardi 		    535220212
+Willy Michael 		    535220216
+Wilson Alfando 	    	535220219
+Benevito Kevin   		535220222
+Gerry Dominiki Sinaga	535220225
