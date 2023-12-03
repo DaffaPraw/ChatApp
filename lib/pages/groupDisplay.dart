@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const groupDisplay());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class groupDisplay extends StatelessWidget {
+  const groupDisplay({super.key});
 
   ElevatedButton iconbutt(IconData a, String b) {
     return ElevatedButton(
