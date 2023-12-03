@@ -1,5 +1,6 @@
 import 'package:chat_app/pages/customer_service.dart';
 import 'package:chat_app/pages/home_page.dart';
+import 'package:chat_app/pages/linkcopy.dart';
 import 'package:flutter/material.dart';
 import 'add_contact.dart';
 
@@ -228,7 +229,7 @@ class ContactList extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => AddContact()),
+                    MaterialPageRoute(builder: (context) => LinkCopyScreen()),
                   );
                 },
                 style: ElevatedButton.styleFrom(
