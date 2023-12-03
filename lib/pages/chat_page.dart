@@ -173,7 +173,6 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
-
   Widget _buildMessageList() {
     return StreamBuilder(
       stream: _chatService.getMessages(
